@@ -7,21 +7,21 @@ This library works on Android as well.
 ## Add it to your project
 
 Jar Download:  
-[https://mvnrepository.com/artifact/com.github.ovidiusimionica/ssdp-client](https://mvnrepository.com/artifact/com.github.ovidiusimionica/ssdp-client)
+[https://mvnrepository.com/artifact/io.github.ovidiusimionica/ssdp-client](https://mvnrepository.com/artifact/io.github.ovidiusimionica/ssdp-client)
 
 
 Maven:
 ```xml
 <!-- https://mvnrepository.com/artifact/io.resourcepool/ssdp-client -->
 <dependency>
-    <groupId>com.github.ovidiusimionica/ssdp-client</groupId>
+    <groupId>io.github.ovidiusimionica/ssdp-client</groupId>
     <artifactId>ssdp-client</artifactId>
     <version>2.5.0</version>
 </dependency>
 ```
 Gradle:
 ```groovy
-compile 'com.github.ovidiusimionica:ssdp-client:2.5.0'
+compile 'io.github.ovidiusimionica:ssdp-client:2.5.0'
 ```
 
 ## Changelog

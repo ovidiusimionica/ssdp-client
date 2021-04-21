@@ -9,7 +9,7 @@
 
   <!-- Project headers-->
   <name>${project.groupId}:${project.artifactId}</name>
-  <description>SSDP 1.0.1 Client</description>
+  <description>SSDP 1.0 Client</description>
   <url>https://github.com/ovidiusimionica/ssdp-client</url>
   <!-- License -->
   <licenses>

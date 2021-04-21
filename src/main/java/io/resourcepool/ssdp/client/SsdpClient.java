@@ -26,7 +26,15 @@ public abstract class SsdpClient {
    * @return new instance of SsdpClient.
    */
   public static SsdpClient create() {
-    return new SsdpClientImpl();
+    return new SsdpClientImpl(new SsdpParams());
+  }
+
+  /**
+   * @param params custom SSDP multicast setting
+   * @return new instance of SsdpClient.
+   */
+  public static SsdpClient create(SsdpParams params) {
+    return new SsdpClientImpl(params);
   }
 
 }

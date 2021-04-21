@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>io.resourcepool</groupId>
+  <groupId>io.github.ovidiusimionica</groupId>
   <artifactId>ssdp-client</artifactId>
   <version>2.5.0-SNAPSHOT</version>
   <packaging>jar</packaging>
@@ -10,7 +10,7 @@
   <!-- Project headers-->
   <name>${project.groupId}:${project.artifactId}</name>
   <description>SSDP 1.0. Client</description>
-  <url>https://github.com/resourcepool/ssdp-client</url>
+  <url>https://github.com/ovidiusimionica/ssdp-client</url>
   <!-- License -->
   <licenses>
     <license>
@@ -23,17 +23,17 @@
   <!-- Developers -->
   <developers>
     <developer>
-      <name>Loïc Ortola</name>
-      <email>contact@loicortola.com</email>
-      <organization>Resourcepool</organization>
-      <organizationUrl>https://github.com/resourcepool</organizationUrl>
+      <name>Ovidiu Simionica</name>
+      <email>ovidiu.simionica@gmail.com</email>
+      <organization>None</organization>
+      <organizationUrl>https://github.com/ovidiusimionica</organizationUrl>
     </developer>
   </developers>
 
   <!-- Source management-->
   <scm>
-    <url>https://github.com/resourcepool/ssdp-client.git</url>
-    <connection>scm:git:https://github.com/resourcepool/ssdp-client.git</connection>
+    <url>https://github.com/ovidiusimionica/ssdp-client.git</url>
+    <connection>scm:git:https://github.com/ovidiusimionica/ssdp-client.git</connection>
     <tag>HEAD</tag>
   </scm>
 
@@ -41,11 +41,11 @@
   <distributionManagement>
     <snapshotRepository>
       <id>ossrh</id>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+      <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
     </snapshotRepository>
     <repository>
       <id>ossrh</id>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+      <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
     </repository>
   </distributionManagement>
 
@@ -64,7 +64,7 @@
         <gpg.keyname>${env.GPG_KEYNAME}</gpg.keyname>
         <gpg.passphrase>${env.GPG_PASSPHRASE}</gpg.passphrase>
         <gpg.defaultKeyring>false</gpg.defaultKeyring>
-        <gpg.publicKeyring>${env.GPG_DIR}/pubring.gpg</gpg.publicKeyring>
+        <gpg.publicKeyring>${env.GPG_DIR}/pubring.kbx</gpg.publicKeyring>
         <gpg.secretKeyring>${env.GPG_DIR}/secring.gpg</gpg.secretKeyring>
       </properties>
       <build>
@@ -92,7 +92,7 @@
             <extensions>true</extensions>
             <configuration>
               <serverId>ossrh</serverId>
-              <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+              <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
               <autoReleaseAfterClose>true</autoReleaseAfterClose>
             </configuration>
           </plugin>

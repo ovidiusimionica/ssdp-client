@@ -1,14 +1,15 @@
 package io.resourcepool.ssdp;
 
-import io.resourcepool.ssdp.client.SsdpParams;
-import io.resourcepool.ssdp.client.parser.ResponseParser;
-import io.resourcepool.ssdp.client.response.SsdpResponse;
-import org.junit.Assert;
-import org.junit.Test;
+import static io.resourcepool.ssdp.client.SsdpParams.UTF_8;
 
 import java.net.DatagramPacket;
 
-import static io.resourcepool.ssdp.client.SsdpParams.UTF_8;
+import org.junit.Assert;
+import org.junit.Test;
+
+import io.resourcepool.ssdp.client.SsdpParams;
+import io.resourcepool.ssdp.client.parser.ResponseParser;
+import io.resourcepool.ssdp.client.response.SsdpResponse;
 
 /**
  * This checks The parsing of Response SSDP Datagrams
@@ -18,10 +19,9 @@ import static io.resourcepool.ssdp.client.SsdpParams.UTF_8;
 public class SSDPResponseParserTest {
 
   /**
-   * This tests checks that headers with multiple semicolumns actually parse the right value.
-   * This is related to issue #7
+   * This tests checks that headers with multiple semicolumns actually parse the right value. This
+   * is related to issue #7
    *
-   * @throws InterruptedException
    * @see "https://github.com/resourcepool/ssdp-client/issues/7"
    */
   @Test
@@ -35,7 +35,9 @@ public class SSDPResponseParserTest {
         .append("INFO: 'shouldbeinvalue: thistoo'\r\n");
 
     byte[] content = sb.toString().getBytes(UTF_8);
-    DatagramPacket datagramPacket = new DatagramPacket(content, content.length, SsdpParams.getSsdpMulticastAddress(), SsdpParams.getSsdpMulticastPort());
+    SsdpParams params = new SsdpParams();
+    DatagramPacket datagramPacket = new DatagramPacket(content, content.length,
+        params.getSsdpMulticastAddress(), params.getSsdpMulticastPort());
 
     SsdpResponse response = ResponseParser.parse(datagramPacket);
     Assert.assertTrue(response.getHeaders().containsKey("NORMAL"));

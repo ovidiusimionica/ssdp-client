@@ -21,6 +21,7 @@ import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -53,21 +54,26 @@ public class SsdpClientImpl extends SsdpClient {
 
     }
   };
+  private final SsdpParams params;
+
+  public SsdpClientImpl(SsdpParams params) {
+    this.params = params;
+  }
 
   private enum State {
     ACTIVE, IDLE, STOPPING
   }
 
-  private ScheduledExecutorService sendExecutor = Executors.newScheduledThreadPool(1);
-  private ExecutorService receiveExecutor = Executors.newSingleThreadExecutor();
+  private final ScheduledExecutorService sendExecutor = Executors.newScheduledThreadPool(1);
+  private final ExecutorService receiveExecutor = Executors.newSingleThreadExecutor();
 
   // Stateful attributes
   private List<DiscoveryRequest> requests;
   private DiscoveryListener callback = NOOP_LISTENER;
   private State state;
-  private Map<String, SsdpService> cache = new ConcurrentHashMap<String, SsdpService>();
+  private final Map<String, SsdpService> cache = new ConcurrentHashMap<>();
   private MulticastSocket clientSocket;
-  private List<NetworkInterface> interfaces;
+  private Set<NetworkInterface> interfaces;
 
   /**
    * Reset all stateful attributes.
@@ -78,7 +84,7 @@ public class SsdpClientImpl extends SsdpClient {
   private void reset(DiscoveryRequest req, DiscoveryListener callback) {
     this.callback = callback;
     this.state = State.ACTIVE;
-    this.requests = new ArrayList<DiscoveryRequest>();
+    this.requests = new ArrayList<>();
     if (req != null) {
       requests.add(req);
     }
@@ -105,31 +111,25 @@ public class SsdpClientImpl extends SsdpClient {
     openAndBindSocket();
 
     // Send UDP Discover Request Datagrams at a fixed rate
-    sendExecutor.scheduleAtFixedRate(new Runnable() {
-      @Override
-      public void run() {
-        sendDiscoveryRequest();
-      }
-    }, 0, req.getDiscoveryOptions().getIntervalBetweenRequests(), TimeUnit.MILLISECONDS);
+    sendExecutor.scheduleAtFixedRate(
+        this::sendDiscoveryRequest,
+        0, req.getDiscoveryOptions().getIntervalBetweenRequests(), TimeUnit.MILLISECONDS);
 
     // Receive all incoming datagrams and handle them on-the-fly
-    receiveExecutor.execute(new Runnable() {
-      @Override
-      public void run() {
-        try {
-          while (State.ACTIVE.equals(state)) {
-            byte[] buffer = new byte[8192];
-            DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
-            clientSocket.receive(packet);
-            handleIncomingPacket(packet);
-          }
-        } catch (IOException e) {
-          if (clientSocket.isClosed() && !State.ACTIVE.equals(state)) {
-            // This could happen when closing socket. In that case, this is not an issue.
-            return;
-          }
-          callback.onFailed(e);
+    receiveExecutor.execute(() -> {
+      try {
+        while (State.ACTIVE.equals(state)) {
+          byte[] buffer = new byte[8192];
+          DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+          clientSocket.receive(packet);
+          handleIncomingPacket(packet);
         }
+      } catch (IOException e) {
+        if (clientSocket.isClosed() && !State.ACTIVE.equals(state)) {
+          // This could happen when closing socket. In that case, this is not an issue.
+          return;
+        }
+        callback.onFailed(e);
       }
     });
   }
@@ -163,10 +163,10 @@ public class SsdpClientImpl extends SsdpClient {
       }
       for (DiscoveryRequest req : requests) {
         if (req.getServiceTypes() == null || req.getServiceTypes().isEmpty()) {
-          sendOnAllInterfaces(SsdpDiscovery.getDatagram(null, req.getDiscoveryOptions()));
+          sendOnAllInterfaces(SsdpDiscovery.getDatagram(null, req.getDiscoveryOptions(), params));
         } else {
           for (String st : req.getServiceTypes()) {
-            sendOnAllInterfaces(SsdpDiscovery.getDatagram(st, req.getDiscoveryOptions()));
+            sendOnAllInterfaces(SsdpDiscovery.getDatagram(st, req.getDiscoveryOptions(), params));
           }
         }
       }
@@ -184,10 +184,10 @@ public class SsdpClientImpl extends SsdpClient {
    */
   private void openAndBindSocket() {
     try {
-      this.clientSocket = new MulticastSocket(SsdpParams.getSsdpMulticastPort());
+      this.clientSocket = new MulticastSocket(params.getSsdpMulticastPort());
       this.clientSocket.setReuseAddress(true);
-      interfaces = Utils.getMulticastInterfaces();
-      joinGroupOnAllInterfaces(SsdpParams.getSsdpMulticastAddress());
+      interfaces = Utils.getMulticastInterfaces(params);
+      joinGroupOnAllInterfaces(params.getSsdpMulticastAddress());
     } catch (IOException e) {
       callback.onFailed(e);
     }
@@ -293,7 +293,7 @@ public class SsdpClientImpl extends SsdpClient {
     this.callback = NOOP_LISTENER;
     this.requests = null;
     try {
-      leaveGroupOnAllInterfaces(SsdpParams.getSsdpMulticastAddress());
+      leaveGroupOnAllInterfaces(params.getSsdpMulticastAddress());
     } catch (IOException e) {
       // Fail silently
     } finally {

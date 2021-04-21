@@ -5,7 +5,11 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import io.resourcepool.ssdp.client.SsdpParams;
 
 /**
  * Utils used by the SsdpClient.
@@ -19,16 +23,19 @@ public abstract class Utils {
    *
    * @throws SocketException if something bad happens
    * @return list of interfaces
+   * @param params
    */
-  public static List<NetworkInterface> getMulticastInterfaces() throws SocketException {
-    List<NetworkInterface> viableInterfaces = new ArrayList<NetworkInterface>();
+  public static Set<NetworkInterface> getMulticastInterfaces(
+      SsdpParams params) throws SocketException {
+    Set<NetworkInterface> viableInterfaces = new HashSet<>();
     Enumeration e = NetworkInterface.getNetworkInterfaces();
     while (e.hasMoreElements()) {
       NetworkInterface n = (NetworkInterface) e.nextElement();
       Enumeration ee = n.getInetAddresses();
       while (ee.hasMoreElements()) {
         InetAddress i = (InetAddress) ee.nextElement();
-        if (i.isSiteLocalAddress() && !i.isAnyLocalAddress() && !i.isLinkLocalAddress()
+        if ((!params.onlyLocalAddress()) || (params.onlyLocalAddress() && i.isSiteLocalAddress())
+            && !i.isAnyLocalAddress() && !i.isLinkLocalAddress()
             && !i.isLoopbackAddress() && !i.isMulticastAddress()) {
           viableInterfaces.add(NetworkInterface.getByName(n.getName()));
         }

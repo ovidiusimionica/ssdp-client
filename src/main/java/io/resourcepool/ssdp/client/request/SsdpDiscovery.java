@@ -19,11 +19,13 @@ public abstract class SsdpDiscovery {
    *
    * @param serviceType the serviceType
    * @param options the Request Discovery Options
+   * @param params the SsdpParams to customize multicast target
    * @return the DatagramPacket matching the search request
    */
-  public static DatagramPacket getDatagram(String serviceType, DiscoveryOptions options) {
+  public static DatagramPacket getDatagram(String serviceType, DiscoveryOptions options,
+      SsdpParams params) {
     StringBuilder sb = new StringBuilder("M-SEARCH * HTTP/1.1\r\n");
-    sb.append("HOST: " + SsdpParams.getSsdpMulticastAddress().getHostAddress() + ":" + SsdpParams.getSsdpMulticastPort() + "\r\n");
+    sb.append("HOST: " + params.getSsdpMulticastAddress().getHostAddress() + ":" + params.getSsdpMulticastPort() + "\r\n");
     sb.append("MAN: \"ssdp:discover\"\r\n");
     sb.append("MX: " + options.getMaxWaitTimeSeconds() + "\r\n");
     if (options.getUserAgent() != null) {
@@ -33,6 +35,6 @@ public abstract class SsdpDiscovery {
     sb.append("\r\n");
 
     byte[] content = sb.toString().getBytes(UTF_8);
-    return new DatagramPacket(content, content.length, SsdpParams.getSsdpMulticastAddress(), SsdpParams.getSsdpMulticastPort());
+    return new DatagramPacket(content, content.length, params.getSsdpMulticastAddress(), params.getSsdpMulticastPort());
   }
 }

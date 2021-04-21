@@ -26,6 +26,9 @@ compile 'io.github.ovidiusimionica:ssdp-client:2.5.0'
 
 ## Changelog
 
+### 2.5.0
+*  #24 Add support for inclusion of external interfaces via SsdpParams
+
 ### 2.4.3
  * #22 Fixed multicast addressed datagrams
  * #23 Bumb versions

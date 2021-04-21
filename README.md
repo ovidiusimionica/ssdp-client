@@ -1,29 +1,27 @@
 # ssdp-client
+A fork of original [https://github.com/resourcepool/ssdp-client](ssdp-client)
 A Simple Asynchronous SSDP/1.0 UPNP/1.1 Java Client using JDK APIs only.
 
 This library works on Android as well.
 
-
-[![Build Status](https://travis-ci.org/resourcepool/ssdp-client.svg?branch=master)](https://travis-ci.org/resourcepool/ssdp-client)
-
 ## Add it to your project
 
 Jar Download:  
-[https://mvnrepository.com/artifact/io.resourcepool/ssdp-client](https://mvnrepository.com/artifact/io.resourcepool/ssdp-client)
+[https://mvnrepository.com/artifact/com.github.ovidiusimionica/ssdp-client](https://mvnrepository.com/artifact/com.github.ovidiusimionica/ssdp-client)
 
 
 Maven:
 ```xml
 <!-- https://mvnrepository.com/artifact/io.resourcepool/ssdp-client -->
 <dependency>
-    <groupId>io.resourcepool</groupId>
+    <groupId>com.github.ovidiusimionica/ssdp-client</groupId>
     <artifactId>ssdp-client</artifactId>
-    <version>2.4.3</version>
+    <version>2.5.0</version>
 </dependency>
 ```
 Gradle:
 ```groovy
-compile 'io.resourcepool:ssdp-client:2.4.3'
+compile 'com.github.ovidiusimionica:ssdp-client:2.5.0'
 ```
 
 ## Changelog

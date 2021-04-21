@@ -150,6 +150,15 @@ Discovery is not a mandatory activity. You might just want to listen to announce
     });
 ```
 
+One can customize the SsdpClient creation to control ssdp multicast options ( ipv4, port, bind network interfaces ):
+```java
+    SsdpClient client = SsdpClient.create(); // default options: 239.255.255.250; 1900; !onlyLocalAddress
+    // OR, the full control:
+    SsdpClient client = SsdpClient.create(new SsdpParams("239.255.255.250", 1900, false));
+    // onlyLocalAddress -> when true it will only use network interfaces that have addresses that 
+    // fall into the site-local range: 10/8, 172.16/12 and 192.168/16
+```
+
 When you're done, don't forget to stop the discovery:
 ```java
 ssdpClient.stopDiscovery();

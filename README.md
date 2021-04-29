@@ -10,14 +10,14 @@ This library works on Android as well.
 Maven:
 ```xml
 <dependency>
-    <groupId>com.cplaneai.oss</groupId>
+    <groupId>com.cplane.oss</groupId>
     <artifactId>ssdp-client</artifactId>
     <version>2.5.0</version>
 </dependency>
 ```
 Gradle:
 ```groovy
-compile 'com.cplaneai.oss:ssdp-client:2.5.0'
+compile 'com.cplane.oss:ssdp-client:2.5.0'
 ```
 
 ## Changelog

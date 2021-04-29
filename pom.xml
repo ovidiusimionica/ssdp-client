@@ -2,15 +2,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>io.github.ovidiusimionica</groupId>
+  <groupId>com.cplane.oss</groupId>
   <artifactId>ssdp-client</artifactId>
-  <version>2.5.1-SNAPSHOT</version>
+  <version>2.5.0</version>
   <packaging>jar</packaging>
 
   <!-- Project headers-->
   <name>${project.groupId}:${project.artifactId}</name>
   <description>SSDP 1.0 Client</description>
-  <url>https://github.com/ovidiusimionica/ssdp-client</url>
+  <url>https://github.com/cplane-networks/ssdp-client</url>
   <!-- License -->
   <licenses>
     <license>
@@ -24,17 +24,17 @@
   <developers>
     <developer>
       <name>Ovidiu Simionica</name>
-      <email>ovidiu.simionica@gmail.com</email>
-      <organization>None</organization>
-      <organizationUrl>https://github.com/ovidiusimionica</organizationUrl>
+      <email>ovidiu.simionica@cplaneai.com</email>
+      <organization>CplaneAI</organization>
+      <organizationUrl>https://cplaneai.com</organizationUrl>
     </developer>
   </developers>
 
   <!-- Source management-->
   <scm>
-    <url>https://github.com/ovidiusimionica/ssdp-client.git</url>
-    <connection>scm:git:https://github.com/ovidiusimionica/ssdp-client.git</connection>
-    <tag>HEAD</tag>
+    <url>https://github.com/cplane-networks/ssdp-client.git</url>
+    <connection>scm:git:https://github.com/cplane-networks/ssdp-client.git</connection>
+    <tag>2.5.0</tag>
   </scm>
 
   <!-- Release -->

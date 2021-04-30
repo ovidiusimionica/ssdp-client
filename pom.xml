@@ -4,7 +4,7 @@
 
   <groupId>com.cplane.oss</groupId>
   <artifactId>ssdp-client</artifactId>
-  <version>2.5.1-SNAPSHOT</version>
+  <version>2.5.1</version>
   <packaging>jar</packaging>
 
   <!-- Project headers-->
@@ -34,7 +34,7 @@
   <scm>
     <url>https://github.com/cplane-networks/ssdp-client.git</url>
     <connection>scm:git:https://github.com/cplane-networks/ssdp-client.git</connection>
-    <tag>HEAD</tag>
+    <tag>2.5.1</tag>
   </scm>
 
   <!-- Release -->

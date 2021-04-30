@@ -12,12 +12,12 @@ Maven:
 <dependency>
     <groupId>com.cplane.oss</groupId>
     <artifactId>ssdp-client</artifactId>
-    <version>2.5.0</version>
+    <version>2.5.1</version>
 </dependency>
 ```
 Gradle:
 ```groovy
-compile 'com.cplane.oss:ssdp-client:2.5.0'
+compile 'com.cplane.oss:ssdp-client:2.5.1'
 ```
 
 ## Changelog

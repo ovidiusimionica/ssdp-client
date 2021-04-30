@@ -30,7 +30,9 @@ public abstract class SsdpDiscovery {
     sb.append("MX: " + options.getMaxWaitTimeSeconds() + "\r\n");
     if (options.getUserAgent() != null) {
       sb.append("USER-AGENT: " + options.getUserAgent() + "\r\n");
-    }    
+    }
+    options.getAdditionalSearchHeaders()
+        .forEach((key, value) -> sb.append(key + ": " + value + "\r\n"));
     sb.append((serviceType == null || serviceType.trim().isEmpty()) ? "ST: ssdp:all\r\n" : "ST: " + serviceType + "\r\n");
     sb.append("\r\n");
 

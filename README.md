@@ -22,6 +22,9 @@ compile 'com.cplane.oss:ssdp-client:2.5.0'
 
 ## Changelog
 
+### 2.5.1
+*  #25 Add support for 'additional M-SEARCH headers' option
+
 ### 2.5.0
 *  #24 Add support for inclusion of external interfaces via SsdpParams
 

@@ -1,5 +1,8 @@
 package io.resourcepool.ssdp.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * This class represents the discovery request options.
  * Defaults are shown in static final fields.
@@ -13,6 +16,7 @@ public class DiscoveryOptions {
   private Long intervalBetweenRequests = DEFAULT_INTERVAL_BETWEEN_REQUESTS;
   private Integer maxWaitTimeSeconds = DEFAULT_MAX_WAIT_TIME_SECONDS;
   private String userAgent = DEFAULT_USER_AGENT;
+  private Map<String,String> additionalSearchHeaders = new HashMap<>();
 
   public Long getIntervalBetweenRequests() {
     return intervalBetweenRequests;
@@ -26,6 +30,10 @@ public class DiscoveryOptions {
     return userAgent;
   }
 
+  public Map<String, String> getAdditionalSearchHeaders() {
+    return additionalSearchHeaders;
+  }
+
   // BEGIN GENERATED CODE
 
   public static Builder builder() {
@@ -36,6 +44,9 @@ public class DiscoveryOptions {
     private Long intervalBetweenRequests = DEFAULT_INTERVAL_BETWEEN_REQUESTS;
     private Integer maxWaitTimeSeconds = DEFAULT_MAX_WAIT_TIME_SECONDS;
     private String userAgent = DEFAULT_USER_AGENT;
+
+
+    private Map<String,String> additionalSearchHeaders = new HashMap<>();
 
     private Builder() {
     }
@@ -81,11 +92,37 @@ public class DiscoveryOptions {
       return this;
     }
 
+    /**
+     * Adds an extra M-SEARCH header
+     *
+     * @param header the key string
+     * @param value the value for that key
+     * @return the current builder
+     */
+    public Builder addSearchHeader(String header, String value) {
+      this.additionalSearchHeaders.put(header, value);
+      return this;
+    }
+
+    /**
+     * Set additional M-SEARCH headers
+     *
+     * @param headers must not be null
+     */
+    public Builder setSearchHeaders(Map<String, String> headers) {
+      if (headers != null) {
+        this.additionalSearchHeaders.clear();
+        this.additionalSearchHeaders.putAll(headers);
+      }
+      return this;
+    }
+
     public DiscoveryOptions build() {
       DiscoveryOptions discoveryOptions = new DiscoveryOptions();
       discoveryOptions.maxWaitTimeSeconds = this.maxWaitTimeSeconds;
       discoveryOptions.intervalBetweenRequests = this.intervalBetweenRequests;
       discoveryOptions.userAgent = this.userAgent;
+      discoveryOptions.additionalSearchHeaders = this.additionalSearchHeaders;
       return discoveryOptions;
     }
   }

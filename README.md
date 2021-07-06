@@ -12,7 +12,7 @@ Maven:
 <dependency>
     <groupId>com.cplane.oss</groupId>
     <artifactId>ssdp-client</artifactId>
-    <version>2.5.1</version>
+    <version>2.5.2</version>
 </dependency>
 ```
 Gradle:
@@ -21,6 +21,9 @@ compile 'com.cplane.oss:ssdp-client:2.5.1'
 ```
 
 ## Changelog
+
+### 2.5.2
+*  #26 Try sending ssdp even when some (not all) interface bindings fail
 
 ### 2.5.1
 *  #25 Add support for 'additional M-SEARCH headers' option

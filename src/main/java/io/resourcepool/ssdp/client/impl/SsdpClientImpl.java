@@ -18,6 +18,7 @@ import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.NetworkInterface;
 import java.net.InetSocketAddress;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -237,13 +238,21 @@ public class SsdpClientImpl extends SsdpClient {
    * @throws IOException from the MulticastSocket
    */
   private void sendOnAllInterfaces(DatagramPacket packet) throws IOException {
+    IOException anError = null;
     if (interfaces != null && interfaces.size() > 0) {
       for (NetworkInterface iface : interfaces) {
-        clientSocket.setNetworkInterface(iface);
-        clientSocket.send(packet);
+        try {
+          clientSocket.setNetworkInterface(iface);
+          clientSocket.send(packet);
+        } catch (IOException ex) {
+          anError = ex;
+        }
       }
     } else {
       clientSocket.send(packet);
+    }
+    if (anError != null) {
+      throw anError;
     }
   }
 

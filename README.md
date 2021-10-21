@@ -22,6 +22,9 @@ compile 'com.cplane.oss:ssdp-client:2.5.1'
 
 ## Changelog
 
+### 2.5.3
+*  #27 Fix udp binding port issue being assigned to 1900; now is assigned to a default port of 65535
+
 ### 2.5.2
 *  #26 Try sending ssdp even when some (not all) interface bindings fail
 

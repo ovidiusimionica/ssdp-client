@@ -1,5 +1,7 @@
 package io.resourcepool.ssdp;
 
+import static io.resourcepool.ssdp.client.SsdpParams.DEFAULT_MULTICAST_IPV4;
+import static io.resourcepool.ssdp.client.SsdpParams.DEFAULT_SSDP_LISTEN_PORT;
 import static org.junit.Assert.assertFalse;
 
 import java.util.concurrent.CountDownLatch;
@@ -67,7 +69,7 @@ public class SSDPSocketTest {
   @Test
   public void testSSDPReceiveCustomMulticast() throws InterruptedException {
     testRun(
-        SsdpClient.create(new SsdpParams(SsdpParams.DEFAULT_MULTICAST_IPV4, 1800, true))
+        SsdpClient.create(new SsdpParams(DEFAULT_MULTICAST_IPV4, 1800, DEFAULT_SSDP_LISTEN_PORT, true))
     );
 
   }

@@ -1,24 +1,11 @@
 package io.resourcepool.ssdp.client.impl;
 
-import io.resourcepool.ssdp.client.SsdpClient;
-import io.resourcepool.ssdp.client.SsdpParams;
-import io.resourcepool.ssdp.client.util.Utils;
-import io.resourcepool.ssdp.client.request.SsdpDiscovery;
-import io.resourcepool.ssdp.client.response.SsdpResponse;
-import io.resourcepool.ssdp.exception.NoSerialNumberException;
-import io.resourcepool.ssdp.model.DiscoveryListener;
-import io.resourcepool.ssdp.model.DiscoveryRequest;
-import io.resourcepool.ssdp.model.SsdpService;
-import io.resourcepool.ssdp.model.SsdpServiceAnnouncement;
-import io.resourcepool.ssdp.client.parser.ResponseParser;
-
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.MulticastSocket;
 import java.net.NetworkInterface;
-import java.net.InetSocketAddress;
-import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -29,30 +16,40 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import io.resourcepool.ssdp.client.SsdpClient;
+import io.resourcepool.ssdp.client.SsdpParams;
+import io.resourcepool.ssdp.client.parser.ResponseParser;
+import io.resourcepool.ssdp.client.request.SsdpDiscovery;
+import io.resourcepool.ssdp.client.response.SsdpResponse;
+import io.resourcepool.ssdp.client.util.Utils;
+import io.resourcepool.ssdp.exception.NoSerialNumberException;
+import io.resourcepool.ssdp.model.DiscoveryListener;
+import io.resourcepool.ssdp.model.DiscoveryRequest;
+import io.resourcepool.ssdp.model.SsdpService;
+import io.resourcepool.ssdp.model.SsdpServiceAnnouncement;
+
 /**
- * The SsdpClient handles all multicast SSDP content.
- * One can send search requests or just listen to the incoming events related to cached services.
+ * The SsdpClient handles all multicast SSDP content. One can send search requests or just listen to the incoming events
+ * related to cached services.
  *
  * @author Loïc Ortola on 05/08/2017
  */
 public class SsdpClientImpl extends SsdpClient {
 
-  // Interval in ms between subsequent discovery requests
-  public static final long DEFAULT_INTERVAL_BETWEEN_REQUESTS = 10000;
   private static final DiscoveryListener NOOP_LISTENER = new DiscoveryListener() {
     @Override
     public void onServiceDiscovered(SsdpService service) {
-
+      // no-op listener
     }
 
     @Override
     public void onServiceAnnouncement(SsdpServiceAnnouncement announcement) {
-
+      // no-op listener
     }
 
     @Override
     public void onFailed(Exception ex) {
-
+      // no-op listener
     }
   };
   private final SsdpParams params;
@@ -103,7 +100,8 @@ public class SsdpClientImpl extends SsdpClient {
   @Override
   public void discoverServices(DiscoveryRequest req, final DiscoveryListener callback) {
     if (State.ACTIVE.equals(state)) {
-      callback.onFailed(new IllegalStateException("Another discovery is in progress. Stop the first discovery before starting a new one."));
+      callback.onFailed(new IllegalStateException(
+          "Another discovery is in progress. Stop the first discovery before starting a new one."));
       return;
     }
     // Reset attributes
@@ -185,7 +183,7 @@ public class SsdpClientImpl extends SsdpClient {
    */
   private void openAndBindSocket() {
     try {
-      this.clientSocket = new MulticastSocket(params.getSsdpMulticastPort());
+      this.clientSocket = new MulticastSocket(params.getSsdpListenPort());
       this.clientSocket.setReuseAddress(true);
       interfaces = Utils.getMulticastInterfaces(params);
       joinGroupOnAllInterfaces(params.getSsdpMulticastAddress());
@@ -232,14 +230,15 @@ public class SsdpClientImpl extends SsdpClient {
 
   /**
    * Send the datagram packet on all interfaces.
-   *
+   * <p>
    * Falls back to the default send() if the interfaces list is not populated
+   *
    * @param packet the datagram to send
    * @throws IOException from the MulticastSocket
    */
   private void sendOnAllInterfaces(DatagramPacket packet) throws IOException {
     IOException anError = null;
-    if (interfaces != null && interfaces.size() > 0) {
+    if (interfaces != null && !interfaces.isEmpty()) {
       for (NetworkInterface iface : interfaces) {
         try {
           clientSocket.setNetworkInterface(iface);
@@ -258,14 +257,16 @@ public class SsdpClientImpl extends SsdpClient {
 
   /**
    * Joins the given multicast group on all interfaces.
-   *
+   * <p>
    * Falls back to the default joinGroup() if the interfaces list is not populated
+   *
    * @param address the multicast group address
    * @throws IOException from the MulticastSocket
    */
   private void joinGroupOnAllInterfaces(InetAddress address) throws IOException {
-    if (interfaces != null && interfaces.size() > 0) {
-      InetSocketAddress socketAddress = new InetSocketAddress(address, 65535); // the port number does not matter here. it is ignored
+    if (interfaces != null && !interfaces.isEmpty()) {
+      InetSocketAddress socketAddress = new InetSocketAddress(address,
+          params.getSsdpListenPort()); // the port number does not matter here. it is ignored
 
       for (NetworkInterface iface : interfaces) {
         this.clientSocket.joinGroup(socketAddress, iface);
@@ -277,14 +278,16 @@ public class SsdpClientImpl extends SsdpClient {
 
   /**
    * Leaves the multicast group on all interfaces.
-   *
+   * <p>
    * Falls back to the default leaveGroup() if the interfaces list is not populated
+   *
    * @param address the multicast group address
    * @throws IOException from the MulticastSocket
    */
   private void leaveGroupOnAllInterfaces(InetAddress address) throws IOException {
-    if (interfaces != null && interfaces.size() > 0) {
-      InetSocketAddress socketAddress = new InetSocketAddress(address, 65535); // the port number does not matter here. it is ignored
+    if (interfaces != null && !interfaces.isEmpty()) {
+      InetSocketAddress socketAddress = new InetSocketAddress(address,
+          params.getSsdpListenPort()); // the port number does not matter here. it is ignored
 
       for (NetworkInterface iface : interfaces) {
         this.clientSocket.leaveGroup(socketAddress, iface);
